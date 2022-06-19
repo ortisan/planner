@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+
+  planner-backend:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./planner-backend
+    environment:
+      - VUE_APP_API_URL=http://localhost:80/api/
+    ports:
+      - '8081:8080'
+
+  planner-frontend:
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./planner-frontend/app
+    environment:
+      - VUE_APP_API_URL=http://localhost:80/api/
+    ports:
+      - '8080:8080'
+    volumes:
+      - /app/node_modules
+      - ./planner-frontend/app:/app
+    depends_on:
+      - planner-backend
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8082:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 123456
+      ME_CONFIG_MONGODB_URL: mongodb://root:123456@mongo:27017/
+
+  nginx:
+    image: nginx:1.19.6
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - planner-frontend
+      - planner-backend
