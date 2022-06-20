@@ -2,6 +2,7 @@ package com.ortisan.plannerbackend.service;
 
 import com.ortisan.plannerbackend.model.Planning;
 import com.ortisan.plannerbackend.model.PlanningItem;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +19,6 @@ public interface IPlanningService {
 
     PlanningItem update(PlanningItem planningItem);
 
-    List<PlanningItem> getItemsByPlanning(UUID planningId);
+    List<PlanningItem> getItemsByPlanning(ObjectId planningId);
 
 }

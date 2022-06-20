@@ -31,6 +31,10 @@ public class PlanningRepository {
     }
 
     public Planning save(Planning planning) {
+        return planningRepository.insert(planning);
+    }
+
+    public Planning update(Planning planning) {
         return planningRepository.save(planning);
     }
 

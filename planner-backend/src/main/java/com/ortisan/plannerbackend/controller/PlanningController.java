@@ -3,6 +3,7 @@ package com.ortisan.plannerbackend.controller;
 import com.ortisan.plannerbackend.model.Planning;
 import com.ortisan.plannerbackend.model.PlanningItem;
 import com.ortisan.plannerbackend.service.IPlanningService;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,22 +32,21 @@ public class PlanningController {
 
     @PostMapping("/plannings/{planningId}/planning-items")
     public ResponseEntity insertItem(@PathVariable("planningId") String planningId, @RequestBody PlanningItem planningItem) {
-        planningItem.setPlanningId(UUID.fromString(planningId));
+        planningItem.setPlanningId(new ObjectId(planningId));
         Planning inserted = planningService.add(planningItem);
         return ResponseEntity.of(Optional.of(inserted));
     }
 
     @GetMapping("/plannings/{planningId}/planning-items")
     public ResponseEntity getPlanningItems(@PathVariable("planningId") String planningIdStr, @RequestParam(required = true) String filter, @RequestParam(required = true) String value) {
-        UUID planningId = UUID.fromString(planningIdStr);
-        List<PlanningItem> itemsBySquad = planningService.getItemsByPlanning(planningId);
+        List<PlanningItem> itemsBySquad = planningService.getItemsByPlanning(new ObjectId());
         return ResponseEntity.of(Optional.of(itemsBySquad));
     }
 
     @PatchMapping("/plannings/{planningId}/planning-items/{id}")
     public ResponseEntity updateItem(@PathVariable("planningId") String planningId, @PathVariable("id") String id, @RequestBody PlanningItem planningItem) {
-        planningItem.setPlanningId(UUID.fromString(planningId));
-        planningItem.setId(UUID.fromString(id));
+        planningItem.setPlanningId(new ObjectId(planningId));
+        planningItem.setId(new ObjectId(id));
         Planning updated = planningService.add(planningItem);
         return ResponseEntity.of(Optional.of(updated));
     }

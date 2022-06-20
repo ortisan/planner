@@ -3,11 +3,11 @@ package com.ortisan.plannerbackend.service;
 import com.ortisan.plannerbackend.model.Planning;
 import com.ortisan.plannerbackend.model.PlanningItem;
 import com.ortisan.plannerbackend.repository.PlanningRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class PlanningService implements IPlanningService {
@@ -18,15 +18,14 @@ public class PlanningService implements IPlanningService {
 
     @Override
     public Planning add(Planning planning) {
-        UUID id = UUID.randomUUID();
-        planning.setId(id);
+        planning.setId(new ObjectId());
         Planning insert = planningRepository.save(planning);
         return insert;
     }
 
     @Override
     public Planning update(Planning planning) {
-        return planningRepository.save(planning);
+        return planningRepository.update(planning);
     }
 
     @Override
@@ -36,7 +35,7 @@ public class PlanningService implements IPlanningService {
 
     @Override
     public Planning add(PlanningItem planningItem) {
-        planningItem.setPlanningId(UUID.randomUUID());
+        planningItem.setId(new ObjectId());
         return planningRepository.addItem(planningItem);
     }
 
@@ -46,7 +45,7 @@ public class PlanningService implements IPlanningService {
     }
 
     @Override
-    public List<PlanningItem> getItemsByPlanning(UUID planningId) {
+    public List<PlanningItem> getItemsByPlanning(ObjectId planningId) {
         return null;
     }
 

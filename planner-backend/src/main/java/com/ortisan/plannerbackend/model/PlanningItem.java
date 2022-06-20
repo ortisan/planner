@@ -1,10 +1,11 @@
 package com.ortisan.plannerbackend.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ortisan.plannerbackend.json.serializers.ObjectIdSerializer;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import org.bson.types.ObjectId;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,9 +16,10 @@ import java.util.UUID;
 @EqualsAndHashCode(callSuper = true)
 @Builder
 public class PlanningItem extends BaseModel {
-    @Id
-    private UUID id;
-    private UUID planningId;
+    @JsonSerialize(using = ObjectIdSerializer.class)
+    private ObjectId id;
+    @JsonSerialize(using = ObjectIdSerializer.class)
+    private ObjectId planningId;
     private String epic;
     private LocalDate dateStart;
     private LocalDate dateEnd;
